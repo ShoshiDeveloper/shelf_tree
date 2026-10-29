@@ -16,10 +16,10 @@ class RouterTree {
     print('register $path');
     if (methods != null) {
       router
-        ..get(path, methods!.get)
-        ..post(path, methods!.post)
-        ..put(path, methods!.put)
-        ..delete(path, methods!.delete);
+        ..get(path, methods!.direct)
+        ..post(path, methods!.direct)
+        ..put(path, methods!.direct)
+        ..delete(path, methods!.direct);
     }
 
     for (final branch in branches) {
@@ -33,8 +33,8 @@ class RouterTree {
     var pipe = const Pipeline();
     final methods = this.methods;
 
-    if (methods is RouteMethodsWithMiddleware) {
-      pipe = pipe.addMiddleware(methods.middleware());
+    if (methods != null && methods.middleware != null) {
+      pipe = pipe.addMiddleware(methods.middleware!);
     }
 
     return pipe.addHandler(router().call);

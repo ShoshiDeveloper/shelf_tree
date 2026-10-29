@@ -12,7 +12,16 @@ void main(List<String> args) async {
     methods: RouteMethodsIndex(),
     branches: [
       RouterTree('/echo/<message>', methods: RouteMethodsEcho()),
-      RouterTree('/<userId>', branches: [RouterTree('/profile', methods: RouteMethodsProfile())]),
+      RouterTree(
+        '/<userId>',
+        branches: [
+          RouterTree(
+            '/profile',
+            methods: RouteMethodsProfile(),
+            branches: [RouterTree('/settings', methods: RouteMethodsProfileSettings())],
+          ),
+        ],
+      ),
     ],
   );
 
@@ -25,14 +34,14 @@ void main(List<String> args) async {
   print('Server listening on port ${server.port}');
 }
 
-class RouteMethodsIndex extends RouteMethodsWithMiddleware {
+class RouteMethodsIndex extends RouteMethods {
   @override
   Response get(Request request) {
     return Response.ok('Welcom to new era!');
   }
 
   @override
-  Middleware middleware() {
+  Middleware get middleware {
     return logRequests();
   }
 }
@@ -50,5 +59,18 @@ class RouteMethodsProfile extends RouteMethods {
   Response get(Request request) {
     final userId = request.params['userId'];
     return Response.ok('This is profile. User: $userId');
+  }
+}
+
+class RouteMethodsProfileSettings extends RouteMethods {
+  @override
+  RouteValidator get validator =>
+      RouteValidator(get: RouteMethodValidator(queryKeys: ['includeTheme']));
+
+  @override
+  Response get(Request request) {
+    final userId = request.params['userId'];
+    final includeTheme = request.url.queryParameters['includeTheme'];
+    return Response.ok('This is profile. User: $userId | include theme $includeTheme');
   }
 }
