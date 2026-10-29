@@ -1,14 +1,15 @@
 name: shelf_tree
 description: This is shelf tree for fast API creation based on dart
-version: 1.0.0
+version: 0.0.1
 repository: https://github.com/ShoshiDeveloper/shelf_tree
+homepage: shoshi.tech
 
 environment:
   sdk: ^3.13.4
 
-# Add regular dependencies here.
 dependencies:
-  # path: ^1.9.0
+  shelf: ^1.4.3
+  shelf_router: ^1.1.5
 
 dev_dependencies:
   lints: ^6.0.0
