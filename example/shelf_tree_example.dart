@@ -57,6 +57,7 @@ class RouteMethodsProfile extends RouteMethods {
   @override
   Response get(RouteRequest request) {
     final userId = request.params['userId'];
+    Response.js
     return Response.ok('This is profile. User: $userId');
   }
 }

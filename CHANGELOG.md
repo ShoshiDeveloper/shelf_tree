@@ -1,3 +1,5 @@
+## 0.0.5
+- Added RouteResponse
 ## 0.0.4
 - Added extensions on Response
 ## 0.0.3

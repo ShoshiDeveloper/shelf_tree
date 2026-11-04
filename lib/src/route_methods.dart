@@ -32,13 +32,13 @@ abstract class RouteMethods {
       final routeRequest = RouteRequest(request, await request.readAsString());
       if (validator != null) await routeRequest.validateByValidator(validator!);
 
-      return await switch (request.method.toUpperCase()) {
+      return (await switch (request.method.toUpperCase()) {
         'GET' => get(routeRequest),
         'POST' => post(routeRequest),
         'PUT' => put(routeRequest),
         'DELETE' => delete(routeRequest),
-        _ => Response.notFound('Undefiend method'),
-      };
+        _ => RouteResponse.notFound(body: 'Undefiend method'),
+      }).response;
     } on RouteException catch (e) {
       return e.response ?? Response.internalServerError();
     } catch (e) {
@@ -46,19 +46,19 @@ abstract class RouteMethods {
     }
   }
 
-  FutureOr<Response> get(RouteRequest request) {
+  FutureOr<RouteResponse> get(RouteRequest request) {
     throw UnimplementedError();
   }
 
-  FutureOr<Response> post(RouteRequest request) {
+  FutureOr<RouteResponse> post(RouteRequest request) {
     throw UnimplementedError();
   }
 
-  FutureOr<Response> put(RouteRequest request) {
+  FutureOr<RouteResponse> put(RouteRequest request) {
     throw UnimplementedError();
   }
 
-  FutureOr<Response> delete(RouteRequest request) {
+  FutureOr<RouteResponse> delete(RouteRequest request) {
     throw UnimplementedError();
   }
 
