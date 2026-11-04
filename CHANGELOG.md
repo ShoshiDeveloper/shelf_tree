@@ -1,3 +1,5 @@
+## 0.0.3
+- Added RouteRequest for re-use body
 ## 0.0.2
 - Added route validators for check body and query parameter keys before request execution
 - Added RouteException
