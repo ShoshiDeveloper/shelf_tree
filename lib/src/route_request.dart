@@ -1,9 +1,24 @@
 import 'dart:convert';
 
 import 'package:shelf/shelf.dart';
+import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf_tree/shelf_tree.dart';
 
-extension RequestExtension on Request {
+class RouteRequest {
+  const RouteRequest(this._request, this.body);
+
+  static Future<RouteRequest> fromRequest(Request request) async {
+    return RouteRequest(request, await request.readAsString());
+  }
+
+  final Request _request;
+  final String body;
+
+  Map<String, dynamic> get bodyAsJson => jsonDecode(body);
+  Map<String, dynamic> get params => _request.params;
+  Map<String, dynamic> get headers => _request.headers;
+  Map<String, dynamic> get queryParameters => _request.url.queryParameters;
+
   Future<void> validateByValidator(RouteValidator validator) async {
     if (validator.get != null) await _validateRouteMethod(validator.get!);
     if (validator.post != null) await _validateRouteMethod(validator.post!);
@@ -17,10 +32,8 @@ extension RequestExtension on Request {
   }
 
   void _checkKeysInQueryParameters(List<String> keys) {
-    final params = url.queryParameters;
-
     for (final key in keys) {
-      if (!params.containsKey(key)) {
+      if (!queryParameters.containsKey(key)) {
         throw RouteException(
           response: Response.badRequest(body: 'Not found key in the query parameters'),
         );
@@ -29,21 +42,10 @@ extension RequestExtension on Request {
   }
 
   Future<void> _checkKeysInBody(List<String> keys) async {
-    final body = await this.body;
-
     for (final key in keys) {
-      if (!body.containsKey(key)) {
+      if (!bodyAsJson.containsKey(key)) {
         throw RouteException(response: Response.badRequest(body: 'Not found key in the body'));
       }
     }
-  }
-
-  Future<Map<String, dynamic>> get body async {
-    final data = await readAsString();
-    if (isEmpty) {
-      throw RouteException(response: Response.badRequest(body: 'Not found body in the request'));
-    }
-
-    return jsonDecode(data);
   }
 }

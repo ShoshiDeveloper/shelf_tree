@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
-import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf_tree/shelf_tree.dart';
 
 void main(List<String> args) async {
@@ -36,7 +35,7 @@ void main(List<String> args) async {
 
 class RouteMethodsIndex extends RouteMethods {
   @override
-  Response get(Request request) {
+  Response get(RouteRequest request) {
     return Response.ok('Welcom to new era!');
   }
 
@@ -48,7 +47,7 @@ class RouteMethodsIndex extends RouteMethods {
 
 class RouteMethodsEcho extends RouteMethods {
   @override
-  Response get(Request request) {
+  Response get(RouteRequest request) {
     final message = request.params['message'];
     return Response.ok('its eeeechoooo! Your message: $message');
   }
@@ -56,7 +55,7 @@ class RouteMethodsEcho extends RouteMethods {
 
 class RouteMethodsProfile extends RouteMethods {
   @override
-  Response get(Request request) {
+  Response get(RouteRequest request) {
     final userId = request.params['userId'];
     return Response.ok('This is profile. User: $userId');
   }
@@ -68,9 +67,9 @@ class RouteMethodsProfileSettings extends RouteMethods {
       RouteValidator(get: RouteMethodValidator(queryKeys: ['includeTheme']));
 
   @override
-  Response get(Request request) {
+  Response get(RouteRequest request) {
     final userId = request.params['userId'];
-    final includeTheme = request.url.queryParameters['includeTheme'];
+    final includeTheme = request.queryParameters['includeTheme'];
     return Response.ok('This is profile. User: $userId | include theme $includeTheme');
   }
 }
