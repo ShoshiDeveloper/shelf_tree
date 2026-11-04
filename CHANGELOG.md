@@ -1,3 +1,5 @@
+## 0.0.4
+- Added extensions on Response
 ## 0.0.3
 - Added RouteRequest for re-use body
 ## 0.0.2
