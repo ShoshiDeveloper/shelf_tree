@@ -20,9 +20,18 @@ enum ImageContentType {
 
 class RouteResponse {
   const RouteResponse(this.statusCode, {this.body, this.headers, this.encoding, this.context});
+  factory RouteResponse.ok(
+    String body, {
+    HttpCode statusCode = HttpCode.s200,
+    Map<String, Object>? headers,
+    Map<String, Object>? context,
+  }) {
+    return RouteResponse(statusCode, body: body, headers: headers, context: context);
+  }
+
   factory RouteResponse.json(
     Object? body, {
-    int statusCode = 200,
+    HttpCode statusCode = HttpCode.s200,
     Map<String, Object>? headers,
     Map<String, Object>? context,
   }) {
@@ -37,7 +46,7 @@ class RouteResponse {
   factory RouteResponse.image(
     Uint8List bytes, {
     ImageContentType contentType = ImageContentType.png,
-    int statusCode = 200,
+    HttpCode statusCode = HttpCode.s200,
     Map<String, Object>? headers,
     Map<String, Object>? context,
   }) {
@@ -50,19 +59,19 @@ class RouteResponse {
   }
 
   factory RouteResponse.notFound({String? body}) {
-    return RouteResponse(404, body: body ?? 'Not found');
+    return RouteResponse(HttpCode.ce404, body: body ?? 'Not found');
   }
 
   factory RouteResponse.internalServerError({String? body}) {
-    return RouteResponse(500, body: body ?? 'Internal Server Error');
+    return RouteResponse(HttpCode.se500, body: body ?? 'Internal Server Error');
   }
 
-  final int statusCode;
+  final HttpCode statusCode;
   final Map<String, Object>? headers;
   final Map<String, Object>? context;
   final Encoding? encoding;
   final Object? body;
 
   Response get response =>
-      Response(statusCode, body: body, context: context, encoding: encoding, headers: headers);
+      Response(statusCode.code, body: body, context: context, encoding: encoding, headers: headers);
 }

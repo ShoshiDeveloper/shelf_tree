@@ -1,4 +1,7 @@
 ## 0.0.5
+- Added http codes and http method for RouteResponse
+- Add context getter in RouteRequest
+## 0.0.5
 - Added RouteResponse
 ## 0.0.4
 - Added extensions on Response

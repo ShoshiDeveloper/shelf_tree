@@ -15,6 +15,10 @@ class RouteRequest {
   Map<String, dynamic> get bodyAsJson => jsonDecode(body);
   Map<String, dynamic> get params => _request.params;
   Map<String, dynamic> get headers => _request.headers;
+  Map<String, dynamic> get context => _request.context;
+  HttpMethod get method => HttpMethod.fromString(_request.method);
+
+  Uri get url => _request.url;
   Map<String, dynamic> get queryParameters => _request.url.queryParameters;
 
   Future<void> validateByValidator(RouteValidator validator) async {

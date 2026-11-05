@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_tree/shelf_tree.dart';
 
@@ -35,8 +34,8 @@ void main(List<String> args) async {
 
 class RouteMethodsIndex extends RouteMethods {
   @override
-  Response get(RouteRequest request) {
-    return Response.ok('Welcom to new era!');
+  RouteResponse get(RouteRequest request) {
+    return RouteResponse(HttpCode.s200, body: 'Welcom to new era!');
   }
 
   @override
@@ -47,18 +46,17 @@ class RouteMethodsIndex extends RouteMethods {
 
 class RouteMethodsEcho extends RouteMethods {
   @override
-  Response get(RouteRequest request) {
+  RouteResponse get(RouteRequest request) {
     final message = request.params['message'];
-    return Response.ok('its eeeechoooo! Your message: $message');
+    return RouteResponse(HttpCode.s200, body: 'its eeeechoooo! Your message: $message');
   }
 }
 
 class RouteMethodsProfile extends RouteMethods {
   @override
-  Response get(RouteRequest request) {
+  RouteResponse get(RouteRequest request) {
     final userId = request.params['userId'];
-    Response.js
-    return Response.ok('This is profile. User: $userId');
+    return RouteResponse(HttpCode.s200, body: 'This is profile. User: $userId');
   }
 }
 
@@ -68,9 +66,12 @@ class RouteMethodsProfileSettings extends RouteMethods {
       RouteValidator(get: RouteMethodValidator(queryKeys: ['includeTheme']));
 
   @override
-  Response get(RouteRequest request) {
+  RouteResponse get(RouteRequest request) {
     final userId = request.params['userId'];
     final includeTheme = request.queryParameters['includeTheme'];
-    return Response.ok('This is profile. User: $userId | include theme $includeTheme');
+    return RouteResponse(
+      HttpCode.s200,
+      body: 'This is profile. User: $userId | include theme $includeTheme',
+    );
   }
 }
