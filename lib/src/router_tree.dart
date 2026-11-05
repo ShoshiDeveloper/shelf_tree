@@ -7,21 +7,35 @@ class RouterTree {
   final RouteMethods? methods;
   final List<RouterTree> branches;
 
-  Router router({Router? outRouter, String parentPath = ''}) {
+  Router router({
+    Router? outRouter,
+    String parentPath = '',
+    List<Middleware> middlewares = const [],
+  }) {
     var router = outRouter ?? Router();
     String path = parentPath == '/' ? route : '$parentPath$route';
 
     print('register $path');
+    final currentMiddlewares = [?methods?.middleware, ...middlewares];
+
     if (methods != null) {
+      var pipeline = const Pipeline();
+
+      for (final middleware in currentMiddlewares) {
+        pipeline = pipeline.addMiddleware(middleware);
+      }
+
+      final handler = pipeline.addHandler(methods!.direct);
+
       router
-        ..get(path, methods!.direct)
-        ..post(path, methods!.direct)
-        ..put(path, methods!.direct)
-        ..delete(path, methods!.direct);
+        ..get(path, handler)
+        ..post(path, handler)
+        ..put(path, handler)
+        ..delete(path, handler);
     }
 
     for (final branch in branches) {
-      router = branch.router(outRouter: router, parentPath: path);
+      router = branch.router(outRouter: router, parentPath: path, middlewares: currentMiddlewares);
     }
 
     return router;
@@ -29,12 +43,6 @@ class RouterTree {
 
   Handler get handler {
     var pipe = const Pipeline();
-    final methods = this.methods;
-
-    if (methods != null && methods.middleware != null) {
-      pipe = pipe.addMiddleware(methods.middleware!);
-    }
-
     return pipe.addHandler(router().call);
   }
 }
