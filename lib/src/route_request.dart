@@ -37,7 +37,7 @@ class RouteRequest {
     for (final key in keys) {
       if (!queryParameters.containsKey(key)) {
         throw RouteException(
-          response: Response.badRequest(body: 'Not found key in the query parameters'),
+          response: RouteResponse(HttpCode.ce400, body: 'Not found key in the query parameters'),
         );
       }
     }
@@ -46,7 +46,9 @@ class RouteRequest {
   Future<void> _checkKeysInBody(List<String> keys) async {
     for (final key in keys) {
       if (!bodyAsJson.containsKey(key)) {
-        throw RouteException(response: Response.badRequest(body: 'Not found key in the body'));
+        throw RouteException(
+          response: RouteResponse(HttpCode.ce400, body: 'Not found key in the body'),
+        );
       }
     }
   }

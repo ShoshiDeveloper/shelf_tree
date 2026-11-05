@@ -1,7 +1,7 @@
-import 'package:shelf/shelf.dart';
+import 'package:shelf_tree/src/index.dart';
 
 class RouteException implements Exception {
   const RouteException({this.response});
 
-  final Response? response;
+  final RouteResponse? response;
 }

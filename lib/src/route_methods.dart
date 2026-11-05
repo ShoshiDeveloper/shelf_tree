@@ -40,9 +40,9 @@ abstract class RouteMethods {
         _ => RouteResponse.notFound(body: 'Undefiend method'),
       }).response;
     } on RouteException catch (e) {
-      return e.response ?? Response.internalServerError();
+      return e.response?.response ?? RouteResponse.internalServerError().response;
     } catch (e) {
-      return Response.internalServerError(body: e);
+      return RouteResponse.internalServerError(body: e.toString()).response;
     }
   }
 
