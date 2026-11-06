@@ -20,8 +20,8 @@ enum ImageContentType {
 
 class RouteResponse {
   const RouteResponse(this.statusCode, {this.body, this.headers, this.encoding, this.context});
-  factory RouteResponse.ok(
-    String body, {
+  factory RouteResponse.ok({
+    String? body,
     HttpCode statusCode = HttpCode.s200,
     Map<String, Object>? headers,
     Map<String, Object>? context,
