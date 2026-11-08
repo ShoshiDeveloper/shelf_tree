@@ -21,11 +21,18 @@ class RouteRequest {
   Uri get url => _request.url;
   Map<String, dynamic> get queryParameters => _request.url.queryParameters;
 
-  Future<void> validateByValidator(RouteValidator validator) async {
-    if (validator.get != null) await _validateRouteMethod(validator.get!);
-    if (validator.post != null) await _validateRouteMethod(validator.post!);
-    if (validator.put != null) await _validateRouteMethod(validator.put!);
-    if (validator.delete != null) await _validateRouteMethod(validator.delete!);
+  Future<void> validateByValidator(RouteValidator validator, RouteRequest request) async {
+    await switch (request.method) {
+      HttpMethod.GET => _validateRouteMethod(validator.get!),
+      HttpMethod.POST => _validateRouteMethod(validator.post!),
+      HttpMethod.PUT => _validateRouteMethod(validator.put!),
+      HttpMethod.DELETE => _validateRouteMethod(validator.delete!),
+      HttpMethod.PATCH => throw UnimplementedError(),
+      HttpMethod.OPTIONS => throw UnimplementedError(),
+      HttpMethod.HEAD => throw UnimplementedError(),
+      HttpMethod.TRACE => throw UnimplementedError(),
+      HttpMethod.CONNECT => throw UnimplementedError(),
+    };
   }
 
   Future<void> _validateRouteMethod(RouteMethodValidator validator) async {

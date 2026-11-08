@@ -30,19 +30,20 @@ abstract class RouteMethods {
   FutureOr<Response> direct(Request request) async {
     try {
       final routeRequest = RouteRequest(request, await request.readAsString());
-      if (validator != null) await routeRequest.validateByValidator(validator!);
+      if (validator != null) await routeRequest.validateByValidator(validator!, routeRequest);
 
-      return (await switch (request.method.toUpperCase()) {
-        'GET' => get(routeRequest),
-        'POST' => post(routeRequest),
-        'PUT' => put(routeRequest),
-        'DELETE' => delete(routeRequest),
+      return (await switch (routeRequest.method) {
+        HttpMethod.GET => get(routeRequest),
+        HttpMethod.POST => post(routeRequest),
+        HttpMethod.PUT => put(routeRequest),
+        HttpMethod.DELETE => delete(routeRequest),
         _ => RouteResponse.notFound(body: 'Undefiend method'),
       }).response;
     } on RouteException catch (e) {
       return e.response?.response ?? RouteResponse.internalServerError().response;
-    } catch (e) {
-      return RouteResponse.internalServerError(body: e.toString()).response;
+    } catch (e, st) {
+      /// TODO: add modes for hide e and st in production
+      return RouteResponse.internalServerError(body: '$e\n$st').response;
     }
   }
 
