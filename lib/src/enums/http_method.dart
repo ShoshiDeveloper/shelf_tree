@@ -14,5 +14,5 @@ enum HttpMethod {
   const HttpMethod();
 
   static HttpMethod fromString(String value) =>
-      HttpMethod.values.firstWhere((e) => e.name.toString() == value.toLowerCase());
+      HttpMethod.values.firstWhere((e) => e.name.toString().toLowerCase() == value.toLowerCase());
 }

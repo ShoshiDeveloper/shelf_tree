@@ -30,7 +30,7 @@ abstract class RouteMethods {
   FutureOr<Response> direct(Request request) async {
     try {
       final routeRequest = RouteRequest(request, await request.readAsString());
-      if (validator != null) await routeRequest.validateByValidator(validator!, routeRequest);
+      if (validator != null) await routeRequest.validateByValidator(validator!);
 
       return (await switch (routeRequest.method) {
         HttpMethod.GET => get(routeRequest),

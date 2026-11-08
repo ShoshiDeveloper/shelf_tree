@@ -21,8 +21,8 @@ class RouteRequest {
   Uri get url => _request.url;
   Map<String, dynamic> get queryParameters => _request.url.queryParameters;
 
-  Future<void> validateByValidator(RouteValidator validator, RouteRequest request) async {
-    final routeValidator = switch (request.method) {
+  Future<void> validateByValidator(RouteValidator validator) async {
+    final routeValidator = switch (method) {
       HttpMethod.GET => validator.get,
       HttpMethod.POST => validator.post,
       HttpMethod.PUT => validator.put,
