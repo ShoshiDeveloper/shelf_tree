@@ -22,17 +22,19 @@ class RouteRequest {
   Map<String, dynamic> get queryParameters => _request.url.queryParameters;
 
   Future<void> validateByValidator(RouteValidator validator, RouteRequest request) async {
-    await switch (request.method) {
-      HttpMethod.GET => _validateRouteMethod(validator.get!),
-      HttpMethod.POST => _validateRouteMethod(validator.post!),
-      HttpMethod.PUT => _validateRouteMethod(validator.put!),
-      HttpMethod.DELETE => _validateRouteMethod(validator.delete!),
+    final routeValidator = switch (request.method) {
+      HttpMethod.GET => validator.get,
+      HttpMethod.POST => validator.post,
+      HttpMethod.PUT => validator.put,
+      HttpMethod.DELETE => validator.delete,
       HttpMethod.PATCH => throw UnimplementedError(),
       HttpMethod.OPTIONS => throw UnimplementedError(),
       HttpMethod.HEAD => throw UnimplementedError(),
       HttpMethod.TRACE => throw UnimplementedError(),
       HttpMethod.CONNECT => throw UnimplementedError(),
     };
+
+    if (routeValidator != null) await _validateRouteMethod(routeValidator);
   }
 
   Future<void> _validateRouteMethod(RouteMethodValidator validator) async {
