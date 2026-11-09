@@ -16,7 +16,7 @@ class RouterTree {
     String path = parentPath == '/' ? route : '$parentPath$route';
 
     print('register $path');
-    final currentMiddlewares = [?methods?.middleware, ...middlewares];
+    final currentMiddlewares = [...middlewares, ?methods?.middleware];
 
     if (methods != null) {
       var pipeline = const Pipeline();
