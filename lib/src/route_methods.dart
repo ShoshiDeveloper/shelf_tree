@@ -48,19 +48,19 @@ abstract class RouteMethods {
   }
 
   FutureOr<RouteResponse> get(RouteRequest request) {
-    throw UnimplementedError();
+    return RouteResponse(HttpCode.se501);
   }
 
   FutureOr<RouteResponse> post(RouteRequest request) {
-    throw UnimplementedError();
+    return RouteResponse(HttpCode.se501);
   }
 
   FutureOr<RouteResponse> put(RouteRequest request) {
-    throw UnimplementedError();
+    return RouteResponse(HttpCode.se501);
   }
 
   FutureOr<RouteResponse> delete(RouteRequest request) {
-    throw UnimplementedError();
+    return RouteResponse(HttpCode.se501);
   }
 
   Middleware? get middleware => null;
